@@ -22,7 +22,7 @@ Read every changed file. Map:
 - All file I/O operations
 - All state management changes
 
-## Phase 2: Launch Attack Agents (2 in parallel)
+## Phase 2: Launch Attack Agents (2 in parallel, model: "opus" — adversarial security work)
 
 ### Agent 1 — Input Fuzzing Attack
 

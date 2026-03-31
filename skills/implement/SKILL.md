@@ -10,7 +10,7 @@ Implement this task using parallel agents for maximum efficiency.
 
 ## Phase 1: Understand & Decompose
 
-Launch 2 Explore agents IN PARALLEL:
+Launch 2 Explore agents IN PARALLEL (model: "sonnet" — read-only exploration):
 
 ### Agent 1: Task Analysis
 - Understand what needs to be built/changed
@@ -43,7 +43,7 @@ Rules for decomposition:
 
 ## Phase 3: Parallel Implementation
 
-For each group of independent subtasks, launch general-purpose agents IN PARALLEL:
+For each group of independent subtasks, launch general-purpose agents IN PARALLEL (model: "opus" — implementation/coding work):
 
 ### Per-Agent Instructions
 Each implementation agent must:

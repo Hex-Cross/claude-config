@@ -8,7 +8,7 @@ user-invocable: true
 
 Perform a focused architecture review using parallel agents.
 
-## Launch 3 Explore Agents IN PARALLEL
+## Launch 3 Explore Agents IN PARALLEL (model: "opus" — architecture judgment work)
 
 ### Agent 1: Modularity & Coupling
 Analyze code organization:

@@ -10,7 +10,7 @@ Perform a comprehensive architecture analysis using parallel agents.
 
 ## Step 1: Parallel Exploration
 
-Launch 3 Explore agents IN PARALLEL in a single message:
+Launch 3 Explore agents IN PARALLEL in a single message (model: "opus" — architecture analysis/judgment):
 
 ### Agent 1: Structure & Organization
 Explore the codebase structure:

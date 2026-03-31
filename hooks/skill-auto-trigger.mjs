@@ -27,8 +27,15 @@ try {
 const prompt = (input.prompt || input.message || '').toLowerCase().trim();
 const sessionId = input.session_id || 'unknown';
 
-// Skip empty or very short prompts
-if (prompt.length < 5) {
+// Skip empty or very short prompts (under 15 chars catches "ok go", "yes", "sure do it")
+if (prompt.length < 15) {
+  process.stdout.write('{}');
+  process.exit(0);
+}
+
+// Bug 2: Skip questions — these are information requests, not task requests
+const QUESTION_PREFIXES = ['how ', 'what ', 'why ', 'where ', 'when ', 'can you ', 'could you ', 'explain ', 'tell me '];
+if (QUESTION_PREFIXES.some(q => prompt.startsWith(q)) || (prompt.match(/\?/g) || []).length >= 1) {
   process.stdout.write('{}');
   process.exit(0);
 }
@@ -125,11 +132,11 @@ for (const [name, def] of Object.entries(INTENTS)) {
   scores[name] = scoreIntent(def, prompt);
 }
 
-// Find winner
+// Find winner — prefer trivial on ties so typo-level changes don't get full bugfix chains
 let bestIntent = null;
 let bestScore = 5; // minimum threshold
 for (const [name, score] of Object.entries(scores)) {
-  if (score > bestScore) {
+  if (score > bestScore || (score === bestScore && score > 5 && name === 'trivial')) {
     bestScore = score;
     bestIntent = name;
   }
@@ -163,8 +170,8 @@ const taskSize = bestIntent === 'trivial' ? 'trivial' : detectSize(prompt);
 
 // --- Dedup: skip if same intent already injected this session ---
 const dedupKey = `${bestIntent}-${taskSize}`;
-if (seenIntents[dedupKey] && (Date.now() - seenIntents[dedupKey]) < 300000) {
-  // Same intent within 5 minutes — skip
+if (seenIntents[dedupKey] && (Date.now() - seenIntents[dedupKey]) < 60000) {
+  // Exact same intent+size within 1 minute — skip
   process.stdout.write('{}');
   process.exit(0);
 }
@@ -181,20 +188,18 @@ const CHAINS = {
     small: `[auto-trigger] Small feature detected. Execute this skill chain IN ORDER:
 1. /superpowers-writing-plans — plan the implementation
 2. Implement the plan
-3. /full-verification — run all quality gates
-4. /superpowers-code-review — 3-agent review
-5. /pre-flight — final 10-gate check
+3. /superpowers-code-review — 3-agent review
+4. /pre-flight — final 10-gate check
 
 Do NOT skip any step. Do NOT ask for permission between steps — execute the full chain automatically.`,
     medium: `[auto-trigger] Medium feature detected. Execute this MANDATORY skill chain IN ORDER:
 1. /superpowers-brainstorming — explore requirements and design
 2. /superpowers-writing-plans — TDD-style implementation plan
 3. /implement — parallel multi-agent implementation
-4. /full-verification — tests + SAST + lint + types + deps + coverage
-5. /red-team — adversarial attack simulation
-6. /accessibility-audit — if ANY UI files changed (.tsx/.jsx/.css/.html)
-7. /superpowers-code-review — 3-agent parallel review
-8. /pre-flight — ultimate 10-gate final check
+4. /red-team — ONLY if changed files include API handlers, auth, payments, DB queries, or user input processing. Skip for UI-only or config changes.
+5. /accessibility-audit — if ANY UI files changed (.tsx/.jsx/.css/.html)
+6. /superpowers-code-review — 3-agent parallel review
+7. /pre-flight — ultimate 10-gate final check (skip Gate 8 red-team — already ran)
 
 CRITICAL: Execute ALL steps automatically. Do NOT pause between skills to ask the user.
 Only stop for: errors that need user input, credentials, or clarifying ambiguous requirements.
@@ -203,11 +208,10 @@ If any gate FAILS: fix the issue, then re-run from that gate forward.`,
 1. /superpowers-brainstorming — deep requirements exploration (MUST get user approval on design)
 2. /superpowers-writing-plans — detailed TDD-style plan
 3. /implement — parallel multi-agent implementation (use worktree isolation)
-4. /full-verification — ALL quality gates (zero failures allowed)
-5. /red-team — adversarial attack simulation (2 agents)
-6. /accessibility-audit — if ANY UI files changed
-7. /superpowers-code-review — 3-agent parallel review
-8. /pre-flight — ultimate 10-gate final check
+4. /red-team — adversarial attack simulation (2 agents)
+5. /accessibility-audit — if ANY UI files changed
+6. /superpowers-code-review — 3-agent parallel review
+7. /pre-flight — ultimate 10-gate final check (skip Gate 8 red-team — already ran)
 
 CRITICAL: Execute ALL steps automatically. Only pause for user approval after brainstorming (step 1).
 If any gate FAILS: fix → re-run from that gate.
@@ -219,28 +223,25 @@ Use worktree isolation for implementation (3+ files or risky changes).`
     small: `[auto-trigger] Bug fix detected. Execute this chain:
 1. Investigate root cause (read relevant code, check error messages)
 2. Fix the bug
-3. /full-verification — run all quality gates
-4. /superpowers-code-review — verify fix quality
-5. /pre-flight — final check
+3. /superpowers-code-review — verify fix quality
+4. /pre-flight — final check
 
 Execute automatically. Do NOT ask between steps.`,
     medium: `[auto-trigger] Medium bug fix detected. Execute this chain:
 1. /gsd:debug — systematic investigation with scientific method
 2. Fix the root cause (not just symptoms)
-3. /full-verification — ALL quality gates
-4. /red-team — ensure fix doesn't introduce new vulnerabilities
-5. /superpowers-code-review — 3-agent review
-6. /pre-flight — final 10-gate check
+3. /red-team — ensure fix doesn't introduce new vulnerabilities
+4. /superpowers-code-review — 3-agent review
+5. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
 
 Execute automatically. If /gsd:debug identifies root cause, proceed to fix without asking.`,
     large: `[auto-trigger] Large/complex bug detected. Execute this chain:
 1. /gsd:debug — systematic investigation (may need multiple rounds)
 2. /superpowers-writing-plans — plan the fix approach
 3. Fix implementation (use worktree if cross-cutting)
-4. /full-verification — ALL quality gates
-5. /red-team — adversarial testing of the fix
-6. /superpowers-code-review — 3-agent review
-7. /pre-flight — final 10-gate check
+4. /red-team — adversarial testing of the fix
+5. /superpowers-code-review — 3-agent review
+6. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
 
 Execute automatically. Only pause if investigation is inconclusive and needs user context.`
   },
@@ -249,21 +250,19 @@ Execute automatically. Only pause if investigation is inconclusive and needs use
     trivial: `[auto-trigger] Trivial refactor. Do it directly, lint + type-check after.`,
     small: `[auto-trigger] Small refactor detected. Execute this chain:
 1. Implement the refactor
-2. /full-verification — ensure nothing broke
-3. /dead-code-sweep — clean up any orphaned code
-4. /superpowers-code-review — verify quality
-5. /pre-flight — final check
+2. /dead-code-sweep — clean up any orphaned code
+3. /superpowers-code-review — verify quality
+4. /pre-flight — final check
 
 Execute automatically.`,
     medium: `[auto-trigger] Medium refactor detected. Execute this chain:
 1. /superpowers-brainstorming — explore the refactor approach
 2. /superpowers-writing-plans — plan step by step
 3. /implement — parallel execution
-4. /full-verification — ALL quality gates
-5. /dead-code-sweep — find orphaned code, unused deps
-6. /red-team — ensure refactor didn't break security
-7. /superpowers-code-review — 3-agent review
-8. /pre-flight — final 10-gate check
+4. /dead-code-sweep — find orphaned code, unused deps
+5. /red-team — ONLY if changed files include API handlers, auth, payments, DB queries, or user input processing. Skip for UI-only or config changes.
+6. /superpowers-code-review — 3-agent review
+7. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
 
 Execute automatically. Do NOT pause between steps.`,
     large: `[auto-trigger] Large refactor detected. Execute this chain:
@@ -271,11 +270,10 @@ Execute automatically. Do NOT pause between steps.`,
 2. /superpowers-brainstorming — explore refactor approach (get user approval)
 3. /superpowers-writing-plans — detailed migration plan
 4. /implement — parallel execution with worktree isolation
-5. /full-verification — ALL quality gates
-6. /dead-code-sweep — aggressive cleanup
-7. /red-team — adversarial testing
-8. /superpowers-code-review — 3-agent review
-9. /pre-flight — final 10-gate check
+5. /dead-code-sweep — aggressive cleanup
+6. /red-team — adversarial testing
+7. /superpowers-code-review — 3-agent review
+8. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
 
 Pause after /architect and /superpowers-brainstorming for user approval. Then execute rest automatically.`
   },

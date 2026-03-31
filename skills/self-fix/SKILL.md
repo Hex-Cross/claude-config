@@ -19,7 +19,7 @@ Diagnose and repair the skill ecosystem. Default mode is `check` (read-only).
 
 ## Check Mode (default)
 
-Launch 4 diagnostic agents IN PARALLEL:
+Launch 4 diagnostic agents IN PARALLEL (model: "sonnet" — read-only diagnostics):
 
 ### Agent 1: Frontmatter Validation
 

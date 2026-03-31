@@ -21,7 +21,7 @@ When spawning Agent tool calls, always pass `model: "sonnet"` or `model: "opus"`
 
 For ALL tasks sized **Small** or above, follow this workflow:
 
-### Phase 1: Deep Exploration (5 Parallel Agents)
+### Phase 1: Deep Exploration (Up to 5 Parallel Agents — scale to task size)
 - **Patterns**: Existing conventions, utilities, reusable components
 - **Dependencies**: Import chain, all affected areas
 - **Tests & Docs**: Coverage gaps, related docs/configs
@@ -86,9 +86,11 @@ The `skill-auto-trigger.mjs` hook detects intent and task size from the user's p
 ### Chain by task size:
 
 **Trivial** (typo, 1-3 lines): Fix → lint + type-check
-**Small** (single file, <50 lines): Plan → Implement → `/full-verification` → `/superpowers-code-review` → `/pre-flight`
-**Medium** (multi-file): `/superpowers-brainstorming` → `/superpowers-writing-plans` → `/implement` → `/full-verification` → `/red-team` → `/accessibility-audit` (if UI) → `/superpowers-code-review` → `/pre-flight`
+**Small** (single file, <50 lines): `/superpowers-writing-plans` → Implement → `/superpowers-code-review` → `/pre-flight`
+**Medium** (multi-file): `/superpowers-brainstorming` → `/superpowers-writing-plans` → `/implement` → `/red-team` (only if security surface exists) → `/accessibility-audit` (if UI) → `/superpowers-code-review` → `/pre-flight`
 **Large** (cross-cutting): Same as Medium + `/architect` first + worktree isolation + user approval after brainstorming
+
+Note: `/pre-flight` is the FINAL gate and includes all verification checks (lint, types, build, tests, security, deps). There is no separate `/full-verification` step — `/pre-flight` is a superset.
 
 ### Auto-fix loop:
 If any gate FAILS → fix the issue → re-run ONLY that gate → continue chain. Up to 5 retries per gate.
@@ -130,7 +132,7 @@ If still failing after 5 retries → stop and report to user.
 
 1. **Execute & Auto-Test**: Write code → run tests/build → fix autonomously (up to 5 retries)
 2. **Self-Verify**: Re-read diff for debug code, console.logs, TODOs, hardcoded values, type issues
-3. **THE HARD STOP**: Do NOT commit or push. Summarize changes. User handles git manually.
+3. **THE HARD STOP**: Do NOT commit or push unless a skill explicitly requires it (e.g., GSD workflows). For non-GSD work, summarize changes — user handles git manually.
 
 ### Git Safety
 - NEVER `git commit` or `git push` without explicit user approval (denied in settings)

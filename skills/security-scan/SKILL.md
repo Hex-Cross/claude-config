@@ -8,7 +8,7 @@ user-invocable: true
 
 Run a comprehensive security analysis using parallel agents.
 
-## Launch 4 Explore Agents IN PARALLEL
+## Launch 4 Explore Agents IN PARALLEL (model: "opus" — security judgment work)
 
 ### Agent 1: Authentication & Authorization
 Scan for auth vulnerabilities:

@@ -10,7 +10,7 @@ Create an Architecture Decision Record for this technical decision.
 
 ## Step 1: Research Context
 
-Launch an Explore agent to understand:
+Launch an Explore agent (model: "sonnet" — read-only exploration) to understand:
 - Current state of the codebase related to this decision
 - Existing patterns and conventions in use
 - Any prior decisions or tech debt related to this topic
