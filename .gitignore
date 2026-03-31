@@ -1,0 +1,14 @@
+# Runtime / session files
+*.jsonl
+sessions/
+cache/
+plans/
+file-history/
+backups/
+
+# Secrets — never commit the real script, only the template
+scripts/mcp-atlassian.local.sh
+
+# OS
+.DS_Store
+Thumbs.db
