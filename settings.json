@@ -39,6 +39,9 @@
     ],
     "defaultMode": "auto"
   },
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "hooks": {
     "SessionStart": [
       {
@@ -114,6 +117,17 @@
           {
             "type": "command",
             "command": "node \"/home/frok/.claude/hooks/task-review-gate.mjs\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/home/frok/.claude/hooks/teammate-idle-gate.mjs\"",
             "timeout": 5
           }
         ]

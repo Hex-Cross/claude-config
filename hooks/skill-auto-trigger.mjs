@@ -369,17 +369,21 @@ Do NOT skip any step. Do NOT ask for permission between steps — execute the fu
 2. engineering:testing-strategy — define test approach BEFORE writing code
 3. /superpowers-writing-plans — TDD-style implementation plan
 4. /implement — parallel multi-agent implementation
-5. /cross-review — cross-domain agents challenge the implementation (security + architecture lenses)
-6. /red-team — ONLY if changed files include API handlers, auth, payments, DB queries, or user input processing. Skip for UI-only or config changes.
+5. TEAM REVIEW PHASE — Spawn an agent team for collaborative review:
+   - Teammate "security-reviewer": audit for OWASP Top 10, injection, auth bypass, data exposure
+   - Teammate "quality-reviewer": check code quality, conventions, edge cases, error handling
+   - Teammate "architecture-reviewer": verify design patterns, separation of concerns, scalability
+   Instruct teammates to MESSAGE EACH OTHER to discuss findings and challenge disagreements.
+   Wait for all teammates to report. Synthesize their joint findings.
+6. Fix ALL issues found by the review team before proceeding.
 7. design:accessibility-review — if ANY UI files changed (.tsx/.jsx/.css/.html). Full WCAG 2.1 AA audit.
-8. engineering:code-review + /superpowers-code-review — double-layer review (plugin + custom)
-9. /pre-flight — ultimate 10-gate final check (skip Gate 8 red-team — already ran)
-10. engineering:deploy-checklist — pre-merge verification
+8. /pre-flight — ultimate 10-gate final check
+9. engineering:deploy-checklist — pre-merge verification
 
 CRITICAL: Execute ALL steps automatically. Do NOT pause between skills to ask the user.
 Only stop for: errors that need user input, credentials, or clarifying ambiguous requirements.
 If any gate FAILS: fix the issue, then re-run from that gate forward.
-PLUGIN ENHANCEMENT: engineering:testing-strategy runs BEFORE implementation. design:accessibility-review replaces raw accessibility-audit. engineering:code-review adds structured review alongside superpowers-code-review.`,
+AGENT TEAMS: Step 5 uses Agent Teams — teammates communicate directly and cross-check each other's findings before reporting back.`,
     large: `[auto-trigger] Large feature detected. Execute this MANDATORY skill chain IN ORDER:
 1. product-management:write-spec — formalize requirements into PRD with goals, non-goals, success metrics
 2. /superpowers-brainstorming — deep requirements exploration (MUST get user approval on design)
@@ -387,19 +391,23 @@ PLUGIN ENHANCEMENT: engineering:testing-strategy runs BEFORE implementation. des
 4. engineering:testing-strategy — define comprehensive test strategy
 5. /superpowers-writing-plans — detailed TDD-style plan
 6. /implement — parallel multi-agent implementation (use worktree isolation)
-7. /cross-review full — cross-domain challenge on ALL outputs
-8. operations:risk-assessment — identify operational risks of the change
-9. /red-team — adversarial attack simulation (2 agents)
-10. design:accessibility-review — if ANY UI files changed. Full WCAG 2.1 AA.
-11. engineering:code-review + /superpowers-code-review — double-layer review
-12. /pre-flight — ultimate 10-gate final check (skip Gate 8 red-team — already ran)
-13. engineering:deploy-checklist — pre-merge verification
-14. engineering:documentation — update technical docs for the change
+7. TEAM REVIEW PHASE — Spawn a FULL agent team for adversarial review:
+   - Teammate "security-auditor": OWASP Top 10, injection, auth bypass, data exposure, red-team attack simulation
+   - Teammate "quality-reviewer": code quality, conventions, edge cases, error handling, test coverage
+   - Teammate "architecture-reviewer": design patterns, scalability, separation of concerns, API contracts
+   - Teammate "ops-reviewer": operational risk, deployment safety, monitoring gaps, rollback plan
+   Instruct ALL teammates to MESSAGE EACH OTHER — debate disagreements, challenge assumptions, cross-check findings.
+   Wait for all teammates to report. Synthesize joint findings into a single review document.
+8. Fix ALL issues found by the review team.
+9. design:accessibility-review — if ANY UI files changed. Full WCAG 2.1 AA.
+10. /pre-flight — ultimate 10-gate final check
+11. engineering:deploy-checklist — pre-merge verification
+12. engineering:documentation — update technical docs for the change
 
 CRITICAL: Execute ALL steps automatically. Only pause for user approval after step 2 (brainstorming).
 If any gate FAILS: fix → re-run from that gate.
 Use worktree isolation for implementation (3+ files or risky changes).
-PLUGIN ENHANCEMENT: Full plugin chain — spec → design → test strategy → implement → risk → review → deploy → docs.`
+AGENT TEAMS: Step 7 uses Agent Teams with 4 teammates in adversarial mode — they argue, challenge, and cross-check before reporting.`
   },
 
   bugfix: {
@@ -415,26 +423,30 @@ Execute automatically. Do NOT ask between steps.`,
     medium: `[auto-trigger] Medium bug fix detected. Execute this chain:
 1. engineering:debug — structured debugging: reproduce, isolate, diagnose
 2. Fix the root cause (not just symptoms)
-3. /cross-review — verify fix doesn't break other domains
-4. /red-team — ensure fix doesn't introduce new vulnerabilities
-5. engineering:code-review + /superpowers-code-review — double-layer review
-6. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
+3. TEAM REVIEW PHASE — Spawn an agent team to verify the fix:
+   - Teammate "regression-checker": verify fix doesn't break other areas, check related test coverage
+   - Teammate "security-reviewer": ensure fix doesn't introduce new vulnerabilities
+   Instruct teammates to MESSAGE EACH OTHER to cross-check findings.
+4. Fix any issues found by the review team.
+5. /pre-flight — final 10-gate check
 
 Execute automatically. If engineering:debug identifies root cause, proceed to fix without asking.
-PLUGIN ENHANCEMENT: engineering:debug replaces /gsd:debug with structured methodology. engineering:code-review adds formal review.`,
+AGENT TEAMS: Step 3 uses Agent Teams — reviewers collaborate directly to catch regressions and security issues.`,
     large: `[auto-trigger] Large/complex bug detected. Execute this chain:
 1. engineering:debug — structured debugging with multi-round investigation
 2. /superpowers-writing-plans — plan the fix approach
 3. Fix implementation (use worktree if cross-cutting)
-4. /cross-review full — cross-domain challenge on the fix
-5. operations:risk-assessment — assess operational impact of the fix
-6. /red-team — adversarial testing of the fix
-7. engineering:code-review + /superpowers-code-review — double-layer review
-8. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
-9. engineering:deploy-checklist — pre-merge verification
+4. TEAM REVIEW PHASE — Spawn a FULL agent team for adversarial fix review:
+   - Teammate "regression-checker": verify fix doesn't break other areas, trace all affected code paths
+   - Teammate "security-auditor": ensure fix doesn't introduce new vulnerabilities, red-team the fix
+   - Teammate "ops-reviewer": assess operational impact, rollback plan, monitoring gaps
+   Instruct ALL teammates to MESSAGE EACH OTHER — debate, challenge, cross-check.
+5. Fix ALL issues found by the review team.
+6. /pre-flight — final 10-gate check
+7. engineering:deploy-checklist — pre-merge verification
 
 Execute automatically. Only pause if investigation is inconclusive and needs user context.
-PLUGIN ENHANCEMENT: Full plugin-enhanced debug chain with risk assessment and deploy checklist.`
+AGENT TEAMS: Step 4 uses Agent Teams with 3 teammates in adversarial mode — they argue and cross-check the fix before it ships.`
   },
 
   refactor: {
