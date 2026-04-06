@@ -35,7 +35,7 @@ if (prompt.length < 15) {
 
 // Bug 2: Skip questions — these are information requests, not task requests
 const QUESTION_PREFIXES = ['how ', 'what ', 'why ', 'where ', 'when ', 'can you ', 'could you ', 'explain ', 'tell me '];
-if (QUESTION_PREFIXES.some(q => prompt.startsWith(q)) || (prompt.match(/\?/g) || []).length >= 1) {
+if (QUESTION_PREFIXES.some(q => prompt.startsWith(q)) || (prompt.match(/\?/g) || []).length >= 2) {
   process.stdout.write('{}');
   process.exit(0);
 }
@@ -102,6 +102,177 @@ const INTENTS = {
       'update the copy', 'small change', 'quick fix', 'one line',
       'just change', 'just update', 'just rename'
     ]
+  },
+  research: {
+    phrases: [
+      'research', 'investigate market', 'market analysis', 'competitor',
+      'landscape', 'trend', 'opportunity', 'market size', 'tam sam som',
+      'competitive analysis', 'industry', 'benchmark', 'compare providers',
+      'evaluate options', 'pros and cons', 'debate', 'bull bear',
+      'what are the options', 'explore alternatives'
+    ],
+    allOf: [
+      ['find', 'out'], ['look', 'into'], ['dig', 'into'],
+      ['research', 'about'], ['compare', 'between']
+    ],
+    noneOf: ['fix', 'bug', 'implement', 'build', 'create']
+  },
+  testing: {
+    phrases: [
+      'test', 'write tests', 'add tests', 'test coverage', 'e2e test',
+      'unit test', 'integration test', 'test suite', 'playwright',
+      'run tests', 'test this', 'api test', 'load test', 'performance test',
+      'contract test', 'storybook', 'visual regression', 'test strategy'
+    ],
+    noneOf: ['fix', 'bug', 'create a new feature']
+  },
+  deploy: {
+    phrases: [
+      'deploy', 'deployment', 'push to production', 'ship', 'release',
+      'go live', 'ci/cd', 'pipeline', 'docker', 'infrastructure',
+      'staging', 'preview', 'rollback', 'environment', 'vercel deploy',
+      'production', 'devops', 'monitoring', 'health check endpoint'
+    ],
+    noneOf: ['fix deploy', 'deploy bug']
+  },
+  marketing: {
+    phrases: [
+      'linkedin', 'blog post', 'social media', 'content', 'marketing',
+      'campaign', 'seo', 'copy', 'copywriting', 'brand', 'promo',
+      'newsletter', 'email campaign', 'ad copy', 'content calendar',
+      'growth', 'engagement', 'post about', 'write a post', 'carousel'
+    ],
+    noneOf: ['fix', 'bug', 'implement']
+  },
+  sales: {
+    phrases: [
+      'prospect', 'pipeline', 'proposal', 'pitch', 'outreach',
+      'cold email', 'lead', 'sales', 'deal', 'client', 'pricing',
+      'quote', 'sow', 'rfp', 'objection', 'follow up', 'dm',
+      'target list', 'icp', 'buyer persona'
+    ],
+    noneOf: ['fix', 'bug', 'implement']
+  },
+  executive: {
+    phrases: [
+      'strategy', 'okr', 'roadmap', 'briefing', 'board', 'investor',
+      'stakeholder', 'decision matrix', 'roi', 'revenue', 'pricing model',
+      'financial', 'forecast', 'budget', 'burn rate', 'quarterly review',
+      'executive summary', 'business plan', 'go to market', 'gtm',
+      'strategic', 'quarterly', 'business strategy'
+    ],
+    allOf: [
+      ['strategy', 'review'], ['quarterly', 'review'], ['okr', 'update'],
+      ['business', 'decision'], ['revenue', 'model']
+    ],
+    noneOf: ['fix', 'bug', 'implement']
+  },
+  database: {
+    phrases: [
+      'schema', 'migration', 'database', 'table', 'index', 'query',
+      'prisma', 'drizzle', 'sql', 'seed data', 'db', 'foreign key',
+      'relation', 'orm', 'slow query', 'optimize query', 'data model'
+    ],
+    allOf: [
+      ['database', 'schema'], ['db', 'migration'], ['data', 'model']
+    ],
+    noneOf: ['fix the ui', 'frontend', 'architecture decision', 'adr', 'decision record']
+  },
+  documentation: {
+    phrases: [
+      'document', 'documentation', 'readme', 'adr', 'changelog',
+      'architecture decision', 'decision record', 'write docs', 'update docs',
+      'api docs', 'technical spec', 'runbook', 'onboarding doc'
+    ],
+    allOf: [
+      ['architecture', 'decision'], ['decision', 'record'], ['write', 'docs'],
+      ['update', 'docs']
+    ],
+    noneOf: ['fix', 'bug']
+  },
+  dependency: {
+    phrases: [
+      'dependency', 'dependencies', 'outdated', 'npm audit', 'vulnerable',
+      'update packages', 'upgrade packages', 'security advisory',
+      'deprecated package', 'node_modules', 'package.json',
+      'lock file', 'version bump', 'breaking change', 'packages'
+    ],
+    allOf: [
+      ['update', 'packages'], ['upgrade', 'packages'], ['check', 'packages'],
+      ['audit', 'packages'], ['all', 'packages']
+    ]
+  },
+  indonesian: {
+    phrases: [
+      'halal', 'bpjph', 'sihalal', 'sertifikasi halal', 'halal certification',
+      'ppn', 'pph', 'coretax', 'e-faktur', 'pajak', 'tax indonesia',
+      'bpjs', 'thr', 'severance', 'indonesian tax', 'indonesian compliance',
+      'xendit', 'gopay', 'ovo', 'dana', 'qris', 'virtual account',
+      'whatsapp', 'wa business', 'whatsapp api', 'whatsapp template',
+      'bahasa', 'indonesian sme', 'umkm'
+    ],
+    allOf: [
+      ['halal', 'compliance'], ['tax', 'indonesia'], ['whatsapp', 'integration'],
+      ['payment', 'indonesia'], ['xendit', 'payment']
+    ]
+  },
+  observability: {
+    phrases: [
+      'sentry', 'error tracking', 'monitoring', 'alerting', 'observability',
+      'error boundary', 'crash report', 'uptime', 'health check',
+      'logging', 'trace', 'apm', 'error rate', 'incident'
+    ],
+    noneOf: ['fix', 'bug', 'create']
+  },
+  localization: {
+    phrases: [
+      'i18n', 'localization', 'translation', 'translate', 'multilingual',
+      'bilingual', 'bahasa indonesia', 'locale', 'internationalization',
+      'language switch', 'translated', 'string extraction'
+    ]
+  },
+  apidocs: {
+    phrases: [
+      'openapi', 'swagger', 'api documentation', 'api docs', 'api spec',
+      'api reference', 'redoc', 'api schema', 'endpoint documentation'
+    ],
+    allOf: [
+      ['api', 'documentation'], ['api', 'docs'], ['api', 'spec']
+    ]
+  },
+  dbmigration: {
+    phrases: [
+      'migration', 'migrate database', 'schema change', 'alter table',
+      'add column', 'drop column', 'rollback migration', 'migration file',
+      'drizzle migrate', 'prisma migrate', 'db push'
+    ],
+    allOf: [
+      ['database', 'migration'], ['schema', 'change'], ['migration', 'file']
+    ],
+    noneOf: ['architecture decision', 'adr']
+  },
+  crossreview: {
+    phrases: [
+      'cross review', 'cross-review', 'review this output', 'challenge this',
+      'review each other', 'peer review', 'second opinion', 'double check',
+      'verify this work', 'critique this', 'find problems'
+    ],
+    allOf: [
+      ['review', 'work'], ['check', 'quality'], ['find', 'problems']
+    ]
+  },
+  agentdebate: {
+    phrases: [
+      'debate', 'argue', 'pros and cons', 'should we use', 'which is better',
+      'compare approaches', 'tradeoff', 'trade-off', 'advocate vs',
+      'devil advocate', 'for and against', 'weigh options', 'or should',
+      'versus', ' vs ', ' or '
+    ],
+    allOf: [
+      ['should', 'we', 'use'], ['which', 'better'], ['pros', 'cons'],
+      ['compare', 'vs'], ['should', 'use', 'or']
+    ],
+    noneOf: ['fix', 'bug', 'implement', 'build']
   }
 };
 
@@ -188,8 +359,9 @@ const CHAINS = {
     small: `[auto-trigger] Small feature detected. Execute this skill chain IN ORDER:
 1. /superpowers-writing-plans — plan the implementation
 2. Implement the plan
-3. /superpowers-code-review — 3-agent review
-4. /pre-flight — final 10-gate check
+3. /cross-review — lightweight single cross-domain agent challenge (security lens)
+4. /superpowers-code-review — 3-agent review
+5. /pre-flight — final 10-gate check
 
 Do NOT skip any step. Do NOT ask for permission between steps — execute the full chain automatically.`,
     medium: `[auto-trigger] Medium feature detected. Execute this MANDATORY skill chain IN ORDER:
@@ -197,7 +369,7 @@ Do NOT skip any step. Do NOT ask for permission between steps — execute the fu
 2. engineering:testing-strategy — define test approach BEFORE writing code
 3. /superpowers-writing-plans — TDD-style implementation plan
 4. /implement — parallel multi-agent implementation
-5. /cross-audit — cross-domain challenge (dev output audited by different domain)
+5. /cross-review — cross-domain agents challenge the implementation (security + architecture lenses)
 6. /red-team — ONLY if changed files include API handlers, auth, payments, DB queries, or user input processing. Skip for UI-only or config changes.
 7. design:accessibility-review — if ANY UI files changed (.tsx/.jsx/.css/.html). Full WCAG 2.1 AA audit.
 8. engineering:code-review + /superpowers-code-review — double-layer review (plugin + custom)
@@ -215,7 +387,7 @@ PLUGIN ENHANCEMENT: engineering:testing-strategy runs BEFORE implementation. des
 4. engineering:testing-strategy — define comprehensive test strategy
 5. /superpowers-writing-plans — detailed TDD-style plan
 6. /implement — parallel multi-agent implementation (use worktree isolation)
-7. /cross-audit full — cross-domain challenge on ALL outputs
+7. /cross-review full — cross-domain challenge on ALL outputs
 8. operations:risk-assessment — identify operational risks of the change
 9. /red-team — adversarial attack simulation (2 agents)
 10. design:accessibility-review — if ANY UI files changed. Full WCAG 2.1 AA.
@@ -235,14 +407,15 @@ PLUGIN ENHANCEMENT: Full plugin chain — spec → design → test strategy → 
     small: `[auto-trigger] Bug fix detected. Execute this chain:
 1. Investigate root cause (read relevant code, check error messages)
 2. Fix the bug
-3. /superpowers-code-review — verify fix quality
-4. /pre-flight — final check
+3. /cross-review — lightweight single cross-domain agent challenge (verify fix doesn't break other areas)
+4. /superpowers-code-review — verify fix quality
+5. /pre-flight — final check
 
 Execute automatically. Do NOT ask between steps.`,
     medium: `[auto-trigger] Medium bug fix detected. Execute this chain:
 1. engineering:debug — structured debugging: reproduce, isolate, diagnose
 2. Fix the root cause (not just symptoms)
-3. /cross-audit — verify fix doesn't break other domains
+3. /cross-review — verify fix doesn't break other domains
 4. /red-team — ensure fix doesn't introduce new vulnerabilities
 5. engineering:code-review + /superpowers-code-review — double-layer review
 6. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
@@ -253,7 +426,7 @@ PLUGIN ENHANCEMENT: engineering:debug replaces /gsd:debug with structured method
 1. engineering:debug — structured debugging with multi-round investigation
 2. /superpowers-writing-plans — plan the fix approach
 3. Fix implementation (use worktree if cross-cutting)
-4. /cross-audit full — cross-domain challenge on the fix
+4. /cross-review full — cross-domain challenge on the fix
 5. operations:risk-assessment — assess operational impact of the fix
 6. /red-team — adversarial testing of the fix
 7. engineering:code-review + /superpowers-code-review — double-layer review
@@ -269,8 +442,9 @@ PLUGIN ENHANCEMENT: Full plugin-enhanced debug chain with risk assessment and de
     small: `[auto-trigger] Small refactor detected. Execute this chain:
 1. Implement the refactor
 2. /dead-code-sweep — clean up any orphaned code
-3. /superpowers-code-review — verify quality
-4. /pre-flight — final check
+3. /cross-review — lightweight single cross-domain agent challenge (verify refactor doesn't break contracts)
+4. /superpowers-code-review — verify quality
+5. /pre-flight — final check
 
 Execute automatically.`,
     medium: `[auto-trigger] Medium refactor detected. Execute this chain:
@@ -278,7 +452,7 @@ Execute automatically.`,
 2. /superpowers-brainstorming — explore the refactor approach
 3. /superpowers-writing-plans — plan step by step
 4. /implement — parallel execution
-5. /cross-audit — cross-domain challenge on refactored code
+5. /cross-review — cross-domain challenge on refactored code
 6. /dead-code-sweep — find orphaned code, unused deps
 7. /red-team — ONLY if changed files include API handlers, auth, payments, DB queries, or user input processing. Skip for UI-only or config changes.
 8. engineering:code-review + /superpowers-code-review — double-layer review
@@ -293,7 +467,7 @@ PLUGIN ENHANCEMENT: engineering:tech-debt runs first to map debt landscape. engi
 4. /superpowers-writing-plans — detailed migration plan
 5. /implement — parallel execution with worktree isolation
 6. /dead-code-sweep — aggressive cleanup
-7. /cross-audit full — cross-domain challenge on all changes
+7. /cross-review full — cross-domain challenge on all changes
 8. operations:risk-assessment — operational risk of the refactor
 9. /red-team — adversarial testing
 10. engineering:code-review + /superpowers-code-review — double-layer review
@@ -309,13 +483,197 @@ PLUGIN ENHANCEMENT: Full plugin chain — tech debt → ADR → plan → impleme
     trivial: `[auto-trigger] Trivial change detected (typo, rename, label update). Execute directly — lint + type-check after. No skill chain needed.`
   },
 
+  research: {
+    trivial: `[auto-trigger] Quick research. Use WebSearch/WebFetch to answer, then summarize findings.`,
+    small: `[auto-trigger] Research task detected. Route to the best skill:
+- Market/industry → /research-landscape
+- Competitor → /research-competitor-watch
+- Idea evaluation → /research-debate
+- Business opportunity → /research-opportunity
+- Lead finding → use sales-prospector agent
+
+Execute the matching skill automatically.`,
+    medium: `[auto-trigger] Research project detected. Run the relevant research skills:
+1. Identify research type and run matching skill (/research-landscape, /research-competitor-watch, /research-debate, /research-opportunity)
+2. /supervisor-review — quality gate on research output
+Execute automatically.`,
+    large: `[auto-trigger] Deep research requested. Run comprehensive analysis:
+1. /research-landscape — broad market scan
+2. /research-competitor-watch — competitive intelligence
+3. /research-opportunity — opportunity deep-dive
+4. /supervisor-review — quality gate
+5. /exec-briefing — synthesize into executive summary
+Execute all automatically.`
+  },
+
+  testing: {
+    trivial: `[auto-trigger] Quick test. Write and run the test directly.`,
+    small: `[auto-trigger] Testing task detected. Route to the best skill:
+- E2E/user flows → /test-e2e
+- API endpoints → /test-api
+- Performance → /test-performance
+- Visual → /test-storybook
+- Accessibility → /accessibility-audit
+Execute the matching skill automatically.`,
+    medium: `[auto-trigger] Test suite work detected. Execute:
+1. /test-suite — full orchestrated test run (strategist assigns to specialized agents)
+2. Fix any failures
+3. /pre-flight — verify all gates pass
+Execute automatically.`,
+    large: `[auto-trigger] Comprehensive testing requested. Execute full pipeline:
+1. /test-suite — strategist analyzes app, spawns all test agents
+2. /test-ci — generate CI pipeline config
+3. /pre-flight — final quality gates
+Execute automatically.`
+  },
+
+  deploy: {
+    trivial: `[auto-trigger] Quick deploy check. Run /pre-flight then suggest deploy command.`,
+    small: `[auto-trigger] Deployment task detected. Execute:
+1. /pre-flight — ensure code is production-ready
+2. /dev-deploy — generate deployment config and checklist
+Execute automatically.`,
+    medium: `[auto-trigger] Deployment pipeline work detected. Execute:
+1. /pre-flight — full quality gates
+2. /dev-deploy — Docker, CI/CD, monitoring setup
+3. /test-ci — CI pipeline generation
+Execute automatically.`,
+    large: `[auto-trigger] Full infrastructure setup detected. Execute:
+1. /dev-scaffold — project scaffolding if needed
+2. /dev-deploy — full infrastructure setup
+3. /test-ci — CI/CD pipeline
+4. /security-scan — pre-deploy security sweep
+5. /pre-flight — final gates
+Execute automatically.`
+  },
+
+  marketing: {
+    trivial: `[auto-trigger] Quick marketing task. Execute directly.`,
+    small: `[auto-trigger] Marketing content detected. Route to best skill:
+- LinkedIn post → /marketing-post
+- Campaign → /marketing-campaign
+- Video → /promo-video
+Execute the matching skill automatically.`,
+    medium: `[auto-trigger] Marketing project detected. Execute:
+1. /marketing-campaign — full multi-post campaign
+2. /supervisor-review — quality gate
+Execute automatically.`,
+    large: `[auto-trigger] Major marketing initiative. Execute:
+1. /research-landscape — market context
+2. /marketing-campaign — full campaign creation
+3. /supervisor-review — quality gate on each piece
+Execute automatically.`
+  },
+
+  sales: {
+    trivial: `[auto-trigger] Quick sales task. Execute directly.`,
+    small: `[auto-trigger] Sales task detected. Route to best skill:
+- Find prospects → /sales-prospect
+- Write outreach → /sales-outreach
+- Pipeline report → /sales-pipeline
+Execute the matching skill automatically.`,
+    medium: `[auto-trigger] Sales project detected. Execute:
+1. /sales-prospect — full prospecting pipeline
+2. /sales-outreach — personalized sequences
+3. /supervisor-review — quality gate
+Execute automatically.`,
+    large: `[auto-trigger] Full sales pipeline setup. Execute:
+1. /research-landscape — market context
+2. /sales-prospect — ICP, scoring, target lists
+3. /sales-outreach — multi-channel sequences
+4. /sales-pipeline — pipeline tracking setup
+5. /supervisor-review — quality gate
+Execute automatically.`
+  },
+
+  executive: {
+    trivial: `[auto-trigger] Quick executive task. Execute directly.`,
+    small: `[auto-trigger] Executive task detected. Route to best skill:
+- Decision analysis → /exec-decision
+- Strategy/OKR → /exec-strategy
+- Briefing → /exec-briefing
+Execute the matching skill automatically.`,
+    medium: `[auto-trigger] Strategic planning detected. Execute:
+1. Match to skill (/exec-strategy, /exec-decision, /exec-briefing)
+2. /supervisor-review — quality gate
+Execute automatically.`,
+    large: `[auto-trigger] Major strategic initiative. Execute:
+1. /research-landscape — market context
+2. /exec-strategy — full strategic planning
+3. /exec-decision — decision framework
+4. /exec-briefing — stakeholder communication
+5. /supervisor-review — quality gate
+Execute automatically.`
+  },
+
+  database: {
+    trivial: `[auto-trigger] Quick database change. Execute directly, verify with type-check.`,
+    small: `[auto-trigger] Database task detected. Use dev-database-engineer agent for schema design, migrations, query optimization. Execute automatically.`,
+    medium: `[auto-trigger] Database project detected. Execute:
+1. Use dev-database-engineer agent for schema/migration design
+2. Implement the changes
+3. /superpowers-code-review — review
+4. /pre-flight — final check
+Execute automatically.`,
+    large: `[auto-trigger] Major database work detected. Execute:
+1. Use dev-architect agent for data model design
+2. Use dev-database-engineer agent for implementation
+3. /security-scan — check for SQL injection, data exposure
+4. /superpowers-code-review — review
+5. /pre-flight — final gates
+Execute automatically.`
+  },
+
+  documentation: {
+    trivial: `[auto-trigger] Quick doc update. Execute directly.`,
+    small: `[auto-trigger] Documentation task detected. Route:
+- Architecture decision → /adr
+- Project docs → /gsd-docs-update
+- General docs → write directly
+Execute the matching skill automatically.`,
+    medium: `[auto-trigger] Documentation project detected. Execute:
+1. Match to skill (/adr, /gsd-docs-update)
+2. /supervisor-review — quality gate
+Execute automatically.`,
+    large: `[auto-trigger] Major documentation effort. Execute:
+1. /gsd-map-codebase — understand the codebase first
+2. /gsd-docs-update — generate/update documentation
+3. /supervisor-review — quality gate
+Execute automatically.`
+  },
+
+  dependency: {
+    trivial: `[auto-trigger] Quick dependency check. Run npm audit or check outdated packages.`,
+    small: `[auto-trigger] Dependency task detected. Execute:
+1. Run \`npm audit\` and \`npm outdated\` (or pnpm/yarn equivalent)
+2. Report vulnerabilities and outdated packages
+3. Suggest safe updates
+Execute automatically.`,
+    medium: `[auto-trigger] Dependency audit detected. Execute:
+1. Run full dependency audit (npm audit, outdated check)
+2. Check for deprecated packages
+3. Create upgrade plan for breaking changes
+4. /security-scan — verify no new vulnerabilities introduced
+Execute automatically.`,
+    large: `[auto-trigger] Major dependency upgrade detected. Execute:
+1. Full audit of all dependencies
+2. /superpowers-writing-plans — plan the upgrade path
+3. Implement upgrades incrementally
+4. /test-suite — verify nothing breaks
+5. /pre-flight — final gates
+Execute automatically.`
+  },
+
   audit: {
     trivial: `[auto-trigger] Quick audit requested.`,
     small: `[auto-trigger] Audit requested. Run the appropriate audit skill based on what the user asked for.
 - Security → /security-scan
-- Architecture → /review-arch
+- Architecture → /architect
 - Accessibility → /accessibility-audit
 - Code quality → /superpowers-code-review
+- Dead code → /dead-code-sweep
+- Token waste → /token-guard
+- Ecosystem health → /ecosystem-audit
 - Full audit → /pre-flight`,
     medium: `[auto-trigger] Comprehensive audit requested. Run ALL relevant audit skills:
 1. /security-scan — full security analysis
@@ -343,6 +701,104 @@ PLUGIN ENHANCEMENT: engineering + design + operations plugins provide structured
 
 Execute all automatically. Generate a master report combining all findings.
 PLUGIN ENHANCEMENT: 7 plugin skills provide professional audit frameworks across architecture, debt, compliance, risk, accessibility, testing, and data quality.`
+  },
+
+  indonesian: {
+    trivial: `[auto-trigger] Indonesian market task. Execute directly.`,
+    small: `[auto-trigger] Indonesian market task detected. Route to best skill:
+- Halal certification → /halal-compliance
+- Tax/PPh/PPN/Coretax → /indonesia-tax
+- Xendit/payments → /xendit-integrate
+- WhatsApp flows → /whatsapp-flow
+Execute the matching skill automatically.`,
+    medium: `[auto-trigger] Indonesian market project detected. Route to matching skill(s):
+- Halal → /halal-compliance
+- Tax → /indonesia-tax
+- Payments → /xendit-integrate
+- WhatsApp → /whatsapp-flow
+Then run /superpowers-code-review and /pre-flight after implementation.`,
+    large: `[auto-trigger] Major Indonesian market feature. Execute:
+1. Route to matching domain skill(s)
+2. /security-scan — compliance data requires security audit
+3. /superpowers-code-review — review
+4. /pre-flight — final gates
+Execute automatically.`
+  },
+
+  observability: {
+    trivial: `[auto-trigger] Quick monitoring task. Execute directly.`,
+    small: `[auto-trigger] Observability task detected. Route:
+- Error tracking setup → /sentry-integrate
+- Monitoring/alerting → implement directly
+Execute the matching skill automatically.`,
+    medium: `[auto-trigger] Observability project detected. Execute:
+1. /sentry-integrate — error tracking setup
+2. Implement monitoring/alerting
+3. /superpowers-code-review — review
+Execute automatically.`,
+    large: `[auto-trigger] Full observability setup. Execute:
+1. /sentry-integrate — error tracking
+2. Implement health checks, metrics, dashboards
+3. /security-scan — verify no sensitive data in logs
+4. /pre-flight — final gates
+Execute automatically.`
+  },
+
+  localization: {
+    trivial: `[auto-trigger] Quick translation task. Execute directly.`,
+    small: `[auto-trigger] Localization task detected. Run /i18n-sync to scan, extract, and generate translation files. Execute automatically.`,
+    medium: `[auto-trigger] Localization project detected. Execute:
+1. /i18n-sync — full string extraction and translation file generation
+2. /superpowers-code-review — review
+Execute automatically.`,
+    large: `[auto-trigger] Major localization effort. Execute:
+1. /i18n-sync — comprehensive extraction and translation
+2. /accessibility-audit — verify i18n doesn't break accessibility
+3. /pre-flight — final gates
+Execute automatically.`
+  },
+
+  apidocs: {
+    trivial: `[auto-trigger] Quick API doc update. Execute directly.`,
+    small: `[auto-trigger] API documentation task detected. Run /api-docs to scan routes and generate OpenAPI spec. Execute automatically.`,
+    medium: `[auto-trigger] API documentation project detected. Execute:
+1. /api-docs — full OpenAPI spec generation
+2. /supervisor-review — quality gate
+Execute automatically.`,
+    large: `[auto-trigger] Comprehensive API documentation. Execute:
+1. /api-docs — full spec generation with drift detection
+2. /supervisor-review — quality gate
+Execute automatically.`
+  },
+
+  dbmigration: {
+    trivial: `[auto-trigger] Quick migration. Execute directly with type-check.`,
+    small: `[auto-trigger] Database migration detected. Run /db-migrate for safe migration generation with rollback scripts. Execute automatically.`,
+    medium: `[auto-trigger] Database migration project detected. Execute:
+1. /db-migrate — generate migrations with safety analysis
+2. /security-scan — check for data exposure
+3. /superpowers-code-review — review
+Execute automatically.`,
+    large: `[auto-trigger] Major schema migration. Execute:
+1. /db-migrate — full migration with safety analysis and rollback
+2. /security-scan — data security audit
+3. /superpowers-code-review — review
+4. /pre-flight — final gates
+Execute automatically.`
+  },
+
+  crossreview: {
+    trivial: `[auto-trigger] Run /cross-review on the last output. Quick cross-domain check.`,
+    small: `[auto-trigger] Cross-review requested. Run /cross-review to spawn 2 cross-domain reviewers that challenge the work from different expertise perspectives. Execute automatically.`,
+    medium: `[auto-trigger] Cross-review requested. Run /cross-review with full adversarial review — 2 cross-domain agents challenge the work, max 2 revision rounds. Execute automatically.`,
+    large: `[auto-trigger] Full cross-review requested. Run /cross-review on all major outputs in this session. Execute automatically.`
+  },
+
+  agentdebate: {
+    trivial: `[auto-trigger] Quick comparison. List pros/cons directly.`,
+    small: `[auto-trigger] Debate requested. Run /debate — spawn advocate (FOR) and challenger (AGAINST) agents, then a judge resolves conflicts. Execute automatically.`,
+    medium: `[auto-trigger] Structured debate requested. Run /debate with full adversarial positions, evidence, and judge ruling. Execute automatically.`,
+    large: `[auto-trigger] Major decision debate. Run /debate with comprehensive positions, then /cross-review on the judge's ruling for additional scrutiny. Execute automatically.`
   }
 };
 

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "atlassian": {
+      "command": "/home/frok/.claude/scripts/mcp-atlassian.sh",
+      "args": []
+    }
+  }
+}

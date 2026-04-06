@@ -1,0 +1,10 @@
+{
+  "model_profile": "quality",
+  "model_overrides": {
+    "gsd-phase-researcher": "sonnet",
+    "gsd-project-researcher": "sonnet",
+    "gsd-ui-researcher": "sonnet",
+    "gsd-research-synthesizer": "sonnet",
+    "gsd-codebase-mapper": "sonnet"
+  }
+}

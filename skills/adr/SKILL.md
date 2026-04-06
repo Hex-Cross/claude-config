@@ -1,76 +1,34 @@
 ---
 name: adr
-description: Create an Architecture Decision Record documenting a technical decision. Usage: /adr [decision topic]
+description: Create Architecture Decision Records with auto-discovery of existing ADRs, intelligent numbering, context research, cross-referencing, and status management. Usage: /adr [decision topic]
 user-invocable: true
+version: 1.1.0
 ---
 
 # Create ADR: $ARGUMENTS
 
-Create an Architecture Decision Record for this technical decision.
+## Step 1: Discover & Research (2 agents IN PARALLEL)
 
-## Step 1: Research Context
+### Agent 1: ADR Discovery (model: "sonnet")
+- Check directories: `docs/adr/`, `docs/decisions/`, `adr/`, `.adr/`
+- List existing ADRs with numbers, titles, statuses
+- Determine next number (max + 1, or 0001)
+- Read last 3 ADRs to match format/template conventions
+- If no ADR dir exists, use `docs/adr/` with number `0001`
 
-Launch an Explore agent (model: "sonnet" — read-only exploration) to understand:
-- Current state of the codebase related to this decision
-- Existing patterns and conventions in use
-- Any prior decisions or tech debt related to this topic
-- Constraints (tech stack, team size, deadlines, compatibility)
+### Agent 2: Context Research (model: "sonnet")
+- Search codebase for code related to decision topic
+- Check git log for recent related changes
+- Find existing patterns, conventions, constraints
+- Find related ADRs this decision impacts or supersedes
 
-## Step 2: Generate ADR
+## Step 2: Generate ADR (model: "opus")
 
-Check if `docs/adr/` directory exists. If not, create it.
+Write `docs/adr/NNNN-<slug>.md` with: Date, Status (Proposed), Deciders, Context (referencing specific code/metrics/incidents), Decision (with code examples if relevant), Consequences (Positive with impact, Negative with mitigation, Neutral), Alternatives Considered (each with Approach/Pros/Cons/Why rejected — no strawmen), Related Decisions (links to impacted ADRs), References.
 
-Find the next ADR number by checking existing files in `docs/adr/`.
+## Step 3: Cross-Reference
+- If superseding an existing ADR, update old ADR status to "Superseded by NNNN"
+- Verify consistency with other active ADRs (no contradictions)
 
-Write the ADR file as `docs/adr/NNNN-<slugified-topic>.md`:
-
-```markdown
-# NNNN. [Decision Title]
-
-**Date**: [today's date]
-**Status**: Proposed
-**Deciders**: [team/person]
-
-## Context
-
-[What is the issue that we're seeing that is motivating this decision or change?
-What forces are at play? Include technical, business, and team considerations.]
-
-## Decision
-
-[What is the change that we're proposing and/or doing?
-Be specific about the chosen approach.]
-
-## Consequences
-
-### Positive
-- [Benefit 1]
-- [Benefit 2]
-
-### Negative
-- [Trade-off 1]
-- [Trade-off 2]
-
-### Neutral
-- [Side effect that's neither good nor bad]
-
-## Alternatives Considered
-
-### Alternative 1: [Name]
-- **Pros**: ...
-- **Cons**: ...
-- **Why rejected**: ...
-
-### Alternative 2: [Name]
-- **Pros**: ...
-- **Cons**: ...
-- **Why rejected**: ...
-
-## References
-
-- [Links to relevant docs, issues, or discussions]
-```
-
-## Step 3: Present for Review
-
-Show the ADR to the user and ask for feedback before finalizing.
+## Step 4: Present for Review
+Ask: Is context complete? Alternatives missed? Who are deciders? Status Proposed or Accepted?

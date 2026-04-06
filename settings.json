@@ -19,7 +19,6 @@
       "mcp__ide__executeCode",
       "mcp__playwright__*",
       "mcp__claude_ai_Atlassian__*",
-      "mcp__claude_ai_Gmail__*",
       "Bash(*)",
       "NotebookEdit",
       "ToolSearch",
@@ -32,7 +31,7 @@
       "mcp__exa__*",
       "mcp__firecrawl__*",
       "mcp__context7__*",
-      "mcp__sequential-thinking__*"
+      "mcp__claude_ai_Canva__*"
     ],
     "deny": [
       "Bash(git commit*)",
@@ -46,7 +45,13 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/home/frok/.claude/hooks/gsd-check-update.js\""
+            "command": "node \"/home/frok/.claude/hooks/gsd-check-update.js\"",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"/home/frok/.claude/hooks/teams-auto-init.mjs\"",
+            "timeout": 5
           }
         ]
       },
@@ -54,7 +59,16 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/home/frok/.claude/hooks/bootstrap-detect.mjs\"",
+            "command": "bash /home/frok/.claude/hooks/memory-sync.sh",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /home/frok/.claude/hooks/evolve-auto-audit.sh",
             "timeout": 5
           }
         ]
@@ -67,7 +81,7 @@
           {
             "type": "command",
             "command": "node \"/home/frok/.claude/hooks/gsd-context-monitor.js\"",
-            "timeout": 10
+            "timeout": 5
           }
         ]
       },
@@ -77,27 +91,7 @@
           {
             "type": "command",
             "command": "node \"/home/frok/.claude/hooks/auto-format.js\"",
-            "timeout": 15
-          }
-        ]
-      },
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/home/frok/.claude/hooks/config-sync-monitor.mjs\"",
-            "timeout": 5
-          }
-        ]
-      },
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"/home/frok/.claude/hooks/plugin-context-trigger.mjs\"",
-            "timeout": 5
+            "timeout": 10
           }
         ]
       }
@@ -114,6 +108,28 @@
         ]
       }
     ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/home/frok/.claude/hooks/task-review-gate.mjs\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/home/frok/.claude/hooks/subagent-quality-gate.mjs\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Write|Edit",
@@ -121,6 +137,11 @@
           {
             "type": "command",
             "command": "node \"/home/frok/.claude/hooks/gsd-prompt-guard.js\"",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"/home/frok/.claude/hooks/supervisor-gate.mjs\"",
             "timeout": 5
           }
         ]
@@ -130,7 +151,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/home/frok/.claude/hooks/gsd-workflow-guard.js\"",
+            "command": "node \"/home/frok/.claude/hooks/gsd-read-guard.js\"",
             "timeout": 5
           }
         ]

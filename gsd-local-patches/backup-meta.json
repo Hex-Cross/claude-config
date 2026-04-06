@@ -1,0 +1,11 @@
+{
+  "backed_up_at": "2026-04-06T02:43:15.168Z",
+  "from_version": "1.30.0",
+  "from_manifest_timestamp": "2026-03-30T11:43:05.193Z",
+  "files": [
+    "hooks/gsd-check-update.js"
+  ],
+  "pristine_hashes": {
+    "hooks/gsd-check-update.js": "39a6555598841163de07793305d36a33558475011fe601a95e13229c82d9f56e"
+  }
+}

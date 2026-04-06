@@ -43,11 +43,34 @@ if (!fs.existsSync(filePath)) {
   process.exit(0);
 }
 
-// Try to format with prettier
+// Detect formatter: prefer biome if biome.json exists, otherwise prettier
 const { execSync } = require('child_process');
+const path = require('path');
+
+// Walk up from file to find project root with formatter config
+let dir = path.dirname(filePath);
+let useBiome = false;
+for (let i = 0; i < 10; i++) {
+  if (fs.existsSync(path.join(dir, 'biome.json')) || fs.existsSync(path.join(dir, 'biome.jsonc'))) {
+    useBiome = true;
+    break;
+  }
+  if (fs.existsSync(path.join(dir, '.prettierrc')) || fs.existsSync(path.join(dir, '.prettierrc.json')) ||
+      fs.existsSync(path.join(dir, '.prettierrc.js')) || fs.existsSync(path.join(dir, 'prettier.config.js')) ||
+      fs.existsSync(path.join(dir, 'prettier.config.mjs'))) {
+    break; // prettier found first
+  }
+  const parent = path.dirname(dir);
+  if (parent === dir) break;
+  dir = parent;
+}
+
 try {
-  // Check if project has prettier config
-  execSync(`prettier --write "${filePath}" 2>/dev/null`, { timeout: 10000, stdio: 'pipe' });
+  if (useBiome) {
+    execSync(`biome format --write "${filePath}" 2>/dev/null`, { timeout: 10000, stdio: 'pipe' });
+  } else {
+    execSync(`prettier --write "${filePath}" 2>/dev/null`, { timeout: 10000, stdio: 'pipe' });
+  }
 } catch (e) {
-  // Prettier not available or failed — silently continue
+  // Formatter not available or failed — silently continue
 }

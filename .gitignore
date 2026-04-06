@@ -1,14 +1,27 @@
-# Runtime / session files
-*.jsonl
+.credentials.json
 sessions/
+session-env/
 cache/
-plans/
+history.jsonl
+ide/
+telemetry/
 file-history/
+shell-snapshots/
 backups/
+paste-cache/
+plans/
+tasks/
+downloads/
+plugins/
+policy-limits.json
+mcp-needs-auth-cache.json
+vercel-plugin-device-id
+vercel-plugin-telemetry-preference
+remote-settings.json
 
-# Secrets — never commit the real script, only the template
-scripts/mcp-atlassian.local.sh
-
-# OS
-.DS_Store
-Thumbs.db
+# All project-specific data (exclude everything except global memory)
+projects/*/
+!projects/-home-frok/
+projects/-home-frok/*.jsonl
+projects/-home-frok/*/
+!projects/-home-frok/memory/
