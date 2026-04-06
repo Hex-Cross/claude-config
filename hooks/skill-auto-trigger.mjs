@@ -194,28 +194,40 @@ const CHAINS = {
 Do NOT skip any step. Do NOT ask for permission between steps — execute the full chain automatically.`,
     medium: `[auto-trigger] Medium feature detected. Execute this MANDATORY skill chain IN ORDER:
 1. /superpowers-brainstorming — explore requirements and design
-2. /superpowers-writing-plans — TDD-style implementation plan
-3. /implement — parallel multi-agent implementation
-4. /red-team — ONLY if changed files include API handlers, auth, payments, DB queries, or user input processing. Skip for UI-only or config changes.
-5. /accessibility-audit — if ANY UI files changed (.tsx/.jsx/.css/.html)
-6. /superpowers-code-review — 3-agent parallel review
-7. /pre-flight — ultimate 10-gate final check (skip Gate 8 red-team — already ran)
+2. engineering:testing-strategy — define test approach BEFORE writing code
+3. /superpowers-writing-plans — TDD-style implementation plan
+4. /implement — parallel multi-agent implementation
+5. /cross-audit — cross-domain challenge (dev output audited by different domain)
+6. /red-team — ONLY if changed files include API handlers, auth, payments, DB queries, or user input processing. Skip for UI-only or config changes.
+7. design:accessibility-review — if ANY UI files changed (.tsx/.jsx/.css/.html). Full WCAG 2.1 AA audit.
+8. engineering:code-review + /superpowers-code-review — double-layer review (plugin + custom)
+9. /pre-flight — ultimate 10-gate final check (skip Gate 8 red-team — already ran)
+10. engineering:deploy-checklist — pre-merge verification
 
 CRITICAL: Execute ALL steps automatically. Do NOT pause between skills to ask the user.
 Only stop for: errors that need user input, credentials, or clarifying ambiguous requirements.
-If any gate FAILS: fix the issue, then re-run from that gate forward.`,
+If any gate FAILS: fix the issue, then re-run from that gate forward.
+PLUGIN ENHANCEMENT: engineering:testing-strategy runs BEFORE implementation. design:accessibility-review replaces raw accessibility-audit. engineering:code-review adds structured review alongside superpowers-code-review.`,
     large: `[auto-trigger] Large feature detected. Execute this MANDATORY skill chain IN ORDER:
-1. /superpowers-brainstorming — deep requirements exploration (MUST get user approval on design)
-2. /superpowers-writing-plans — detailed TDD-style plan
-3. /implement — parallel multi-agent implementation (use worktree isolation)
-4. /red-team — adversarial attack simulation (2 agents)
-5. /accessibility-audit — if ANY UI files changed
-6. /superpowers-code-review — 3-agent parallel review
-7. /pre-flight — ultimate 10-gate final check (skip Gate 8 red-team — already ran)
+1. product-management:write-spec — formalize requirements into PRD with goals, non-goals, success metrics
+2. /superpowers-brainstorming — deep requirements exploration (MUST get user approval on design)
+3. engineering:system-design — architecture design for the feature
+4. engineering:testing-strategy — define comprehensive test strategy
+5. /superpowers-writing-plans — detailed TDD-style plan
+6. /implement — parallel multi-agent implementation (use worktree isolation)
+7. /cross-audit full — cross-domain challenge on ALL outputs
+8. operations:risk-assessment — identify operational risks of the change
+9. /red-team — adversarial attack simulation (2 agents)
+10. design:accessibility-review — if ANY UI files changed. Full WCAG 2.1 AA.
+11. engineering:code-review + /superpowers-code-review — double-layer review
+12. /pre-flight — ultimate 10-gate final check (skip Gate 8 red-team — already ran)
+13. engineering:deploy-checklist — pre-merge verification
+14. engineering:documentation — update technical docs for the change
 
-CRITICAL: Execute ALL steps automatically. Only pause for user approval after brainstorming (step 1).
+CRITICAL: Execute ALL steps automatically. Only pause for user approval after step 2 (brainstorming).
 If any gate FAILS: fix → re-run from that gate.
-Use worktree isolation for implementation (3+ files or risky changes).`
+Use worktree isolation for implementation (3+ files or risky changes).
+PLUGIN ENHANCEMENT: Full plugin chain — spec → design → test strategy → implement → risk → review → deploy → docs.`
   },
 
   bugfix: {
@@ -228,22 +240,28 @@ Use worktree isolation for implementation (3+ files or risky changes).`
 
 Execute automatically. Do NOT ask between steps.`,
     medium: `[auto-trigger] Medium bug fix detected. Execute this chain:
-1. /gsd:debug — systematic investigation with scientific method
+1. engineering:debug — structured debugging: reproduce, isolate, diagnose
 2. Fix the root cause (not just symptoms)
-3. /red-team — ensure fix doesn't introduce new vulnerabilities
-4. /superpowers-code-review — 3-agent review
-5. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
-
-Execute automatically. If /gsd:debug identifies root cause, proceed to fix without asking.`,
-    large: `[auto-trigger] Large/complex bug detected. Execute this chain:
-1. /gsd:debug — systematic investigation (may need multiple rounds)
-2. /superpowers-writing-plans — plan the fix approach
-3. Fix implementation (use worktree if cross-cutting)
-4. /red-team — adversarial testing of the fix
-5. /superpowers-code-review — 3-agent review
+3. /cross-audit — verify fix doesn't break other domains
+4. /red-team — ensure fix doesn't introduce new vulnerabilities
+5. engineering:code-review + /superpowers-code-review — double-layer review
 6. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
 
-Execute automatically. Only pause if investigation is inconclusive and needs user context.`
+Execute automatically. If engineering:debug identifies root cause, proceed to fix without asking.
+PLUGIN ENHANCEMENT: engineering:debug replaces /gsd:debug with structured methodology. engineering:code-review adds formal review.`,
+    large: `[auto-trigger] Large/complex bug detected. Execute this chain:
+1. engineering:debug — structured debugging with multi-round investigation
+2. /superpowers-writing-plans — plan the fix approach
+3. Fix implementation (use worktree if cross-cutting)
+4. /cross-audit full — cross-domain challenge on the fix
+5. operations:risk-assessment — assess operational impact of the fix
+6. /red-team — adversarial testing of the fix
+7. engineering:code-review + /superpowers-code-review — double-layer review
+8. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
+9. engineering:deploy-checklist — pre-merge verification
+
+Execute automatically. Only pause if investigation is inconclusive and needs user context.
+PLUGIN ENHANCEMENT: Full plugin-enhanced debug chain with risk assessment and deploy checklist.`
   },
 
   refactor: {
@@ -256,26 +274,35 @@ Execute automatically. Only pause if investigation is inconclusive and needs use
 
 Execute automatically.`,
     medium: `[auto-trigger] Medium refactor detected. Execute this chain:
-1. /superpowers-brainstorming — explore the refactor approach
-2. /superpowers-writing-plans — plan step by step
-3. /implement — parallel execution
-4. /dead-code-sweep — find orphaned code, unused deps
-5. /red-team — ONLY if changed files include API handlers, auth, payments, DB queries, or user input processing. Skip for UI-only or config changes.
-6. /superpowers-code-review — 3-agent review
-7. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
+1. engineering:tech-debt — identify and categorize tech debt before refactoring
+2. /superpowers-brainstorming — explore the refactor approach
+3. /superpowers-writing-plans — plan step by step
+4. /implement — parallel execution
+5. /cross-audit — cross-domain challenge on refactored code
+6. /dead-code-sweep — find orphaned code, unused deps
+7. /red-team — ONLY if changed files include API handlers, auth, payments, DB queries, or user input processing. Skip for UI-only or config changes.
+8. engineering:code-review + /superpowers-code-review — double-layer review
+9. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
 
-Execute automatically. Do NOT pause between steps.`,
+Execute automatically. Do NOT pause between steps.
+PLUGIN ENHANCEMENT: engineering:tech-debt runs first to map debt landscape. engineering:code-review adds structured review.`,
     large: `[auto-trigger] Large refactor detected. Execute this chain:
-1. /architect — analyze current architecture first
-2. /superpowers-brainstorming — explore refactor approach (get user approval)
-3. /superpowers-writing-plans — detailed migration plan
-4. /implement — parallel execution with worktree isolation
-5. /dead-code-sweep — aggressive cleanup
-6. /red-team — adversarial testing
-7. /superpowers-code-review — 3-agent review
-8. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
+1. engineering:tech-debt — full tech debt audit and prioritization
+2. engineering:architecture — ADR for the refactor decision
+3. /superpowers-brainstorming — explore refactor approach (get user approval)
+4. /superpowers-writing-plans — detailed migration plan
+5. /implement — parallel execution with worktree isolation
+6. /dead-code-sweep — aggressive cleanup
+7. /cross-audit full — cross-domain challenge on all changes
+8. operations:risk-assessment — operational risk of the refactor
+9. /red-team — adversarial testing
+10. engineering:code-review + /superpowers-code-review — double-layer review
+11. /pre-flight — final 10-gate check (skip Gate 8 red-team — already ran)
+12. engineering:deploy-checklist — pre-merge verification
+13. engineering:documentation — update architecture docs
 
-Pause after /architect and /superpowers-brainstorming for user approval. Then execute rest automatically.`
+Pause after step 3 (brainstorming) for user approval. Then execute rest automatically.
+PLUGIN ENHANCEMENT: Full plugin chain — tech debt → ADR → plan → implement → risk → review → deploy → docs.`
   },
 
   trivial: {
@@ -292,22 +319,30 @@ Pause after /architect and /superpowers-brainstorming for user approval. Then ex
 - Full audit → /pre-flight`,
     medium: `[auto-trigger] Comprehensive audit requested. Run ALL relevant audit skills:
 1. /security-scan — full security analysis
-2. /review-arch — architecture health check
-3. /accessibility-audit — if UI exists
-4. /dead-code-sweep — cleanup opportunities
-5. /pre-flight — full quality pipeline
+2. engineering:architecture — architecture health evaluation
+3. design:accessibility-review — WCAG 2.1 AA audit (if UI exists)
+4. engineering:tech-debt — tech debt identification and categorization
+5. /dead-code-sweep — cleanup opportunities
+6. operations:compliance-tracking — compliance status check
+7. /pre-flight — full quality pipeline
 
-Execute all automatically. Present consolidated findings at the end.`,
+Execute all automatically. Present consolidated findings at the end.
+PLUGIN ENHANCEMENT: engineering + design + operations plugins provide structured frameworks for each audit dimension.`,
     large: `[auto-trigger] Full system audit requested. Run EVERYTHING:
-1. /architect — deep architecture analysis
-2. /security-scan — 4-agent security sweep
-3. /review-arch — architecture health scoring
-4. /accessibility-audit — WCAG 2.1 AA audit
-5. /dead-code-sweep — unused code/deps analysis
-6. /gold-standard — model routing compliance
-7. /pre-flight — 10-gate quality pipeline
+1. engineering:architecture — deep architecture analysis and ADR review
+2. engineering:tech-debt — full tech debt inventory with prioritization
+3. /security-scan — 4-agent security sweep
+4. design:accessibility-review — comprehensive WCAG 2.1 AA audit
+5. operations:compliance-tracking — full compliance status and gaps
+6. operations:risk-assessment — operational risk register
+7. /dead-code-sweep — unused code/deps analysis
+8. engineering:testing-strategy — test coverage gap analysis
+9. /gold-standard — model routing compliance
+10. /pre-flight — 10-gate quality pipeline
+11. data:validate-data — if data pipelines exist, QA the analysis methodology
 
-Execute all automatically. Generate a master report combining all findings.`
+Execute all automatically. Generate a master report combining all findings.
+PLUGIN ENHANCEMENT: 7 plugin skills provide professional audit frameworks across architecture, debt, compliance, risk, accessibility, testing, and data quality.`
   }
 };
 

@@ -49,6 +49,15 @@
             "command": "node \"/home/frok/.claude/hooks/gsd-check-update.js\""
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/home/frok/.claude/hooks/bootstrap-detect.mjs\"",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -69,6 +78,26 @@
             "type": "command",
             "command": "node \"/home/frok/.claude/hooks/auto-format.js\"",
             "timeout": 15
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/home/frok/.claude/hooks/config-sync-monitor.mjs\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/home/frok/.claude/hooks/plugin-context-trigger.mjs\"",
+            "timeout": 5
           }
         ]
       }
