@@ -9,7 +9,6 @@ color: yellow
 #       hooks:
 #         - type: command
 #           command: "npx eslint --fix $FILE 2>/dev/null || true"
-model: opus
 ---
 
 <role>
@@ -96,6 +95,9 @@ grep -n "type=\"checkpoint" [plan-path]
 </step>
 
 <step name="execute_tasks">
+At execution decision points, apply structured reasoning:
+@$HOME/.claude/get-shit-done/references/thinking-models-execution.md
+
 For each task:
 
 1. **If `type="auto"`:**

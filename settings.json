@@ -31,7 +31,11 @@
       "mcp__exa__*",
       "mcp__firecrawl__*",
       "mcp__context7__*",
-      "mcp__claude_ai_Canva__*"
+      "mcp__claude_ai_Canva__*",
+      "mcp__claude_ai_HubSpot__*",
+      "mcp__claude_ai_Intercom__*",
+      "mcp__claude_ai_Linear__*",
+      "mcp__claude_ai_Notion__*"
     ],
     "deny": [
       "Bash(git commit*)",
@@ -75,6 +79,23 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /home/frok/.claude/hooks/gsd-session-state.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/home/frok/.claude/hooks/decision-staleness.mjs\"",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -95,6 +116,16 @@
             "type": "command",
             "command": "node \"/home/frok/.claude/hooks/auto-format.js\"",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /home/frok/.claude/hooks/gsd-phase-boundary.sh",
+            "timeout": 5
           }
         ]
       }
@@ -166,6 +197,36 @@
           {
             "type": "command",
             "command": "node \"/home/frok/.claude/hooks/gsd-read-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/home/frok/.claude/hooks/gsd-workflow-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /home/frok/.claude/hooks/gsd-validate-commit.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/home/frok/.claude/hooks/feedback-enforce.mjs\"",
             "timeout": 5
           }
         ]

@@ -209,11 +209,16 @@ const INTENTS = {
       'bpjs', 'thr', 'severance', 'indonesian tax', 'indonesian compliance',
       'xendit', 'gopay', 'ovo', 'dana', 'qris', 'virtual account',
       'whatsapp', 'wa business', 'whatsapp api', 'whatsapp template',
-      'bahasa', 'indonesian sme', 'umkm'
+      'bahasa', 'indonesian sme', 'umkm',
+      'bpom', 'obat', 'kosmetik', 'makanan', 'food registration', 'drug registration',
+      'nib', 'oss', 'kbli', 'business license', 'izin usaha', 'sertifikat standar',
+      'bank indonesia', 'bi reporting', 'pbi', 'sknbi', 'rtgs', 'e-money', 'aml',
+      'lhbu', 'ppatk', 'fintech compliance'
     ],
     allOf: [
       ['halal', 'compliance'], ['tax', 'indonesia'], ['whatsapp', 'integration'],
-      ['payment', 'indonesia'], ['xendit', 'payment']
+      ['payment', 'indonesia'], ['xendit', 'payment'], ['bpom', 'registration'],
+      ['business', 'license'], ['bank', 'indonesia'], ['fintech', 'compliance']
     ]
   },
   observability: {
@@ -273,6 +278,126 @@ const INTENTS = {
       ['compare', 'vs'], ['should', 'use', 'or']
     ],
     noneOf: ['fix', 'bug', 'implement', 'build']
+  },
+  privacy: {
+    phrases: [
+      'privacy', 'pii', 'personal data', 'gdpr', 'uu pdp', 'data protection',
+      'consent', 'data retention', 'right to delete', 'right to erasure',
+      'data breach', 'data leak', 'sensitive data', 'encrypt pii',
+      'compliance scan', 'privacy audit', 'data inventory', 'dpia',
+      'cross-border transfer', 'data subject rights'
+    ],
+    allOf: [
+      ['personal', 'data'], ['data', 'protection'], ['privacy', 'compliance'],
+      ['data', 'retention'], ['consent', 'management']
+    ],
+    noneOf: ['fix', 'bug', 'create a new']
+  },
+  feedback: {
+    phrases: [
+      'customer feedback', 'user feedback', 'support tickets', 'nps',
+      'what are users saying', 'what customers want', 'customer complaints',
+      'churn', 'churn signals', 'customer sentiment', 'intercom',
+      'support conversations', 'customer satisfaction', 'csat',
+      'user research', 'voice of customer', 'feedback analysis',
+      'ticket triage', 'support triage'
+    ],
+    allOf: [
+      ['customer', 'feedback'], ['user', 'feedback'], ['support', 'tickets'],
+      ['customer', 'saying'], ['users', 'complaining']
+    ],
+    noneOf: ['fix', 'bug', 'implement', 'build']
+  },
+  notification: {
+    phrases: [
+      'notify', 'notification', 'alert the team', 'send alert',
+      'slack message', 'discord message', 'slack webhook', 'discord webhook',
+      'team notification', 'send notification', 'alert channel',
+      'notify slack', 'notify discord', 'webhook setup'
+    ],
+    allOf: [
+      ['notify', 'team'], ['send', 'alert'], ['slack', 'message'],
+      ['discord', 'message'], ['alert', 'channel']
+    ]
+  },
+  experiment: {
+    phrases: [
+      'a/b test', 'ab test', 'experiment', 'feature flag', 'variant',
+      'split test', 'controlled experiment', 'conversion rate',
+      'statistical significance', 'hypothesis test', 'growthbook',
+      'launchdarkly', 'feature toggle', 'experiment design',
+      'which version performs', 'test variant'
+    ],
+    allOf: [
+      ['a/b', 'test'], ['feature', 'flag'], ['split', 'test'],
+      ['experiment', 'design'], ['which', 'version', 'better']
+    ],
+    noneOf: ['fix', 'bug']
+  },
+  resilience: {
+    phrases: [
+      'chaos test', 'chaos engineering', 'resilience', 'fault tolerance',
+      'failure simulation', 'what happens if', 'service goes down',
+      'network failure', 'circuit breaker', 'graceful degradation',
+      'disaster recovery', 'failover', 'mutation test', 'mutation testing',
+      'stryker', 'test quality', 'survived mutants'
+    ],
+    allOf: [
+      ['chaos', 'test'], ['service', 'down'], ['network', 'failure'],
+      ['mutation', 'test'], ['test', 'quality']
+    ],
+    noneOf: ['fix', 'bug', 'create']
+  },
+  opshealth: {
+    phrases: [
+      'app health', 'application health', 'deployment health', 'ops report',
+      'system status', 'error rate', 'uptime report', 'latency report',
+      'health dashboard', 'ops check', 'production health',
+      'are there errors', 'is the app healthy', 'deployment status',
+      'post-deploy check', 'after deploy'
+    ],
+    allOf: [
+      ['app', 'health'], ['deployment', 'health'], ['error', 'rate'],
+      ['production', 'health'], ['system', 'status']
+    ],
+    noneOf: ['fix', 'bug', 'create', 'build']
+  },
+  sync: {
+    phrases: [
+      'sync linear', 'sync jira', 'sync notion', 'sync config',
+      'linear sync', 'jira sync', 'notion sync', 'config sync',
+      'sync issues', 'sync tickets', 'sync tasks', 'sync knowledge',
+      'push to linear', 'pull from linear', 'push to jira', 'pull from jira',
+      'push to notion', 'pull from notion', 'propagate config',
+      'sync across projects', 'update all projects'
+    ],
+    allOf: [
+      ['sync', 'linear'], ['sync', 'jira'], ['sync', 'notion'],
+      ['sync', 'config'], ['sync', 'issues'], ['sync', 'tickets'],
+      ['propagate', 'config']
+    ]
+  },
+  workflow: {
+    phrases: [
+      'resume work', 'continue where', 'pick up where', 'what is next',
+      "what's next", 'next step', 'what should i do', 'show progress',
+      'project progress', 'pause work', 'save context', 'save progress',
+      'ship it', 'create pr', 'merge it', 'open pull request',
+      'new project', 'start fresh', 'initialize project',
+      'new milestone', 'close milestone', 'finish milestone',
+      'plan the phase', 'plan phase', 'execute phase', 'run phase',
+      'verify phase', 'verify work', 'check what we built',
+      'add to backlog', 'review backlog', 'check todos',
+      'map the codebase', 'scan codebase', 'understand the code',
+      'how is the project', 'project status', 'session report'
+    ],
+    allOf: [
+      ['resume', 'work'], ['continue', 'where'], ['what', 'next'],
+      ['show', 'progress'], ['pause', 'work'], ['ship', 'it'],
+      ['create', 'pr'], ['new', 'project'], ['plan', 'phase'],
+      ['execute', 'phase'], ['verify', 'work'], ['map', 'codebase'],
+      ['check', 'todos'], ['project', 'status']
+    ]
   }
 };
 
@@ -718,22 +843,29 @@ PLUGIN ENHANCEMENT: 7 plugin skills provide professional audit frameworks across
   indonesian: {
     trivial: `[auto-trigger] Indonesian market task. Execute directly.`,
     small: `[auto-trigger] Indonesian market task detected. Route to best skill:
-- Halal certification → /halal-compliance
-- Tax/PPh/PPN/Coretax → /indonesia-tax
-- Xendit/payments → /xendit-integrate
-- WhatsApp flows → /whatsapp-flow
+- Halal certification / BPJPH / sertifikasi halal → /halal-compliance
+- Tax / PPh / PPN / Coretax / e-Faktur / BPJS / THR → /indonesia-tax
+- Xendit / payments / QRIS / VA / e-wallets → /xendit-integrate
+- WhatsApp / WA Business / Bahasa templates → /whatsapp-flow
+- BPOM / food registration / drug registration / cosmetics → /bpom-compliance
+- NIB / OSS / KBLI / business license / izin usaha → /nib-oss
+- Bank Indonesia / BI reporting / PBI / SKNBI / RTGS / e-money / AML / fintech compliance → /bi-reporting
 Execute the matching skill automatically.`,
     medium: `[auto-trigger] Indonesian market project detected. Route to matching skill(s):
 - Halal → /halal-compliance
 - Tax → /indonesia-tax
 - Payments → /xendit-integrate
 - WhatsApp → /whatsapp-flow
+- BPOM → /bpom-compliance
+- Business licensing → /nib-oss
+- Fintech/BI → /bi-reporting
 Then run /superpowers-code-review and /pre-flight after implementation.`,
     large: `[auto-trigger] Major Indonesian market feature. Execute:
-1. Route to matching domain skill(s)
-2. /security-scan — compliance data requires security audit
-3. /superpowers-code-review — review
-4. /pre-flight — final gates
+1. Route to ALL matching domain skill(s) — may need multiple (e.g., halal + BPOM for food, tax + BI for fintech)
+2. /privacy-scan — Indonesian personal data (UU PDP) compliance
+3. /security-scan — compliance data requires security audit
+4. /superpowers-code-review — review
+5. /pre-flight — final gates
 Execute automatically.`
   },
 
@@ -811,6 +943,159 @@ Execute automatically.`
     small: `[auto-trigger] Debate requested. Run /debate — spawn advocate (FOR) and challenger (AGAINST) agents, then a judge resolves conflicts. Execute automatically.`,
     medium: `[auto-trigger] Structured debate requested. Run /debate with full adversarial positions, evidence, and judge ruling. Execute automatically.`,
     large: `[auto-trigger] Major decision debate. Run /debate with comprehensive positions, then /cross-review on the judge's ruling for additional scrutiny. Execute automatically.`
+  },
+
+  privacy: {
+    trivial: `[auto-trigger] Quick privacy check. Grep for PII patterns (email, phone, nik, npwp) in the relevant files. Report findings.`,
+    small: `[auto-trigger] Privacy scan requested. Run /privacy-scan — PII discovery + UU PDP/GDPR compliance check. Execute automatically.`,
+    medium: `[auto-trigger] Privacy audit detected. Execute:
+1. /privacy-scan — full PII discovery + compliance analysis
+2. /security-scan — verify encryption, access controls
+3. /supervisor-review — quality gate on report
+Execute automatically.`,
+    large: `[auto-trigger] Comprehensive privacy compliance audit. Execute:
+1. /privacy-scan — full scan with UU PDP + GDPR compliance
+2. /security-scan — full security sweep (data exposure focus)
+3. /red-team — adversarial testing for data leaks
+4. /supervisor-review — quality gate
+Execute automatically.`
+  },
+
+  feedback: {
+    trivial: `[auto-trigger] Quick feedback check. Read recent feedback files in .teams/research/feedback/ and summarize.`,
+    small: `[auto-trigger] Customer feedback analysis requested. Run /customer-feedback — analyze Intercom conversations, categorize, score severity, surface insights. Execute automatically.`,
+    medium: `[auto-trigger] Customer feedback project detected. Execute:
+1. /customer-feedback analyze — full feedback analysis from Intercom
+2. /customer-feedback trends — sentiment trend over 90 days
+3. /supervisor-review — quality gate on report
+Execute automatically.`,
+    large: `[auto-trigger] Comprehensive customer intelligence requested. Execute:
+1. /customer-feedback analyze — full analysis
+2. /customer-feedback trends — sentiment trends
+3. /research-landscape — market context for feedback themes
+4. /exec-briefing — synthesize into executive insights
+5. /supervisor-review — quality gate
+Execute automatically.`
+  },
+
+  notification: {
+    trivial: `[auto-trigger] Quick notification. Run /notify send with the user's message. Execute automatically.`,
+    small: `[auto-trigger] Notification task detected. Route:
+- Setup webhooks → /notify setup
+- Send message → /notify send
+- Check config → /notify status
+- Test connectivity → /notify test
+Execute the matching action automatically.`,
+    medium: `[auto-trigger] Notification setup detected. Execute:
+1. /notify setup — configure Slack/Discord webhooks
+2. /notify test — verify connectivity
+Execute automatically.`,
+    large: `[auto-trigger] Full notification system setup. Execute:
+1. /notify setup — configure all channels
+2. /notify test — verify all channels
+3. Document notification rules and triggers
+Execute automatically.`
+  },
+
+  experiment: {
+    trivial: `[auto-trigger] Quick experiment check. Describe the experiment design directly.`,
+    small: `[auto-trigger] A/B testing requested. Run /ab-test — experiment design, feature flag setup, variant assignment, statistical analysis. Execute automatically.`,
+    medium: `[auto-trigger] Experiment project detected. Execute:
+1. /ab-test — full experiment design and implementation
+2. /superpowers-code-review — review feature flag code
+3. /pre-flight — final check
+Execute automatically.`,
+    large: `[auto-trigger] Major experimentation initiative. Execute:
+1. /ab-test — experiment framework setup + first experiment design
+2. /superpowers-code-review — review
+3. /test-e2e — E2E tests for both variants
+4. /pre-flight — final gates
+Execute automatically.`
+  },
+
+  resilience: {
+    trivial: `[auto-trigger] Quick resilience check. Review error handling in the relevant code.`,
+    small: `[auto-trigger] Resilience/chaos testing requested. Route to best skill:
+- Chaos/failure simulation → /chaos-test
+- Mutation/test quality → /mutation-test
+Execute the matching skill automatically.`,
+    medium: `[auto-trigger] Resilience testing project detected. Execute:
+1. /chaos-test — simulate failures across all dependencies
+2. /mutation-test — verify test suite quality
+3. Fix any gaps found
+Execute automatically.`,
+    large: `[auto-trigger] Comprehensive resilience audit. Execute:
+1. /chaos-test — full failure simulation suite
+2. /mutation-test — mutation testing for test quality
+3. /security-scan — security resilience
+4. /pre-flight — final gates
+Execute automatically.`
+  },
+
+  opshealth: {
+    trivial: `[auto-trigger] Quick health check. Run /ops-monitor health. Execute automatically.`,
+    small: `[auto-trigger] Operations health check requested. Route:
+- General health → /ops-monitor health
+- Deployment analysis → /ops-monitor deploy
+- Error analysis → /ops-monitor errors
+- Full report → /ops-monitor report
+Execute the matching action automatically.`,
+    medium: `[auto-trigger] Operations monitoring detected. Execute:
+1. /ops-monitor report — comprehensive health + deploy + error analysis
+2. /supervisor-review — quality gate
+Execute automatically.`,
+    large: `[auto-trigger] Full operations audit. Execute:
+1. /ops-monitor report — comprehensive analysis
+2. /sentry-integrate triage — error triage
+3. /security-scan — security sweep
+4. /supervisor-review — quality gate
+Execute automatically.`
+  },
+
+  sync: {
+    trivial: `[auto-trigger] Quick sync. Detect target and run matching sync skill.`,
+    small: `[auto-trigger] Sync task detected. Route to best skill:
+- Linear issues → /linear-sync
+- Jira/Confluence → /atlassian-sync
+- Notion knowledge → use notion-knowledge-sync agent
+- Config across projects → /config-sync
+Execute the matching skill automatically.`,
+    medium: `[auto-trigger] Sync project detected. Execute the matching sync skill(s):
+- /linear-sync for issue tracking
+- /atlassian-sync for Jira/Confluence
+- notion-knowledge-sync agent for Notion
+- /config-sync for configuration
+Then verify sync completed successfully. Execute automatically.`,
+    large: `[auto-trigger] Full cross-platform sync. Execute ALL applicable syncs:
+1. /linear-sync — sync GSD phases to Linear
+2. /atlassian-sync — sync to Jira/Confluence
+3. /config-sync push — propagate config to all projects
+4. Use notion-knowledge-sync agent for Notion
+Execute automatically.`
+  },
+
+  workflow: {
+    trivial: `[auto-trigger] GSD workflow command detected.`,
+    small: `[auto-trigger] GSD workflow action detected. Route to the right command:
+- "resume" / "continue" / "pick up" → /gsd-resume-work
+- "what's next" / "next step" → /gsd-next
+- "progress" / "status" / "how is the project" → /gsd-progress
+- "pause" / "save" → /gsd-pause-work
+- "ship" / "create PR" / "merge" → /gsd-ship
+- "new project" / "initialize" → /gsd-new-project
+- "new milestone" → /gsd-new-milestone
+- "plan phase" → /gsd-plan-phase (detect phase number from context or STATE.md)
+- "execute" / "run phase" / "build it" → /gsd-execute-phase
+- "verify" / "check what we built" → /gsd-verify-work
+- "add to backlog" → /gsd-add-backlog
+- "review backlog" / "check todos" → /gsd-check-todos
+- "map codebase" / "understand the code" → /gsd-map-codebase
+- "scan codebase" → /gsd-scan
+- "session report" → /gsd-session-report
+- "close milestone" / "finish milestone" → /gsd-complete-milestone
+Execute the matching command automatically. Read STATE.md for current phase context.`,
+    medium: `[auto-trigger] GSD workflow action detected. Route to the matching command (same as small). Execute automatically.`,
+    large: `[auto-trigger] GSD workflow action detected. Route to the matching command (same as small). Execute automatically.`
   }
 };
 

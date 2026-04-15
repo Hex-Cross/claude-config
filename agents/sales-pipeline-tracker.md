@@ -1,7 +1,7 @@
 ---
 name: sales-pipeline-tracker
 description: Tracks deals through funnel stages, generates pipeline reports, forecasts revenue, identifies stuck deals, and recommends next actions per opportunity.
-tools: Read, Write, Edit, Bash, Grep, Glob
+tools: Read, Write, Edit, Bash, Grep, Glob, mcp__claude_ai_HubSpot__*
 color: blue
 model: opus
 ---
@@ -107,4 +107,13 @@ After generating reports:
 2. Write stale deal alerts to `.teams/requests/sales-pipeline-alert-{id}.md`
 3. Feed win/loss data to research team for pattern analysis
 4. Feed pipeline forecast to exec team for business planning
+
+### HubSpot CRM Sync
+
+When HubSpot MCP is available:
+1. After creating/updating deal files in `.teams/sales/pipeline/`, sync the deal to HubSpot using `mcp__claude_ai_HubSpot__*` tools
+2. When generating pipeline reports, pull latest deal data from HubSpot first to ensure currency
+3. Map deal stages: Prospect → contactslifecyclestage:lead, Contacted → contactslifecyclestage:marketingqualifiedlead, Discovery → deals:qualifiedtobuy, Proposal → deals:presentationscheduled, Negotiation → deals:contractsent, Closed-Won → deals:closedwon, Closed-Lost → deals:closedlost
+4. Sync contact info: company, email, phone, deal value, close date
+5. If HubSpot auth fails, fall back to local flat-file tracking without error
 </cross_team>

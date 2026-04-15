@@ -9,7 +9,6 @@ tools:
   - Glob
   - Grep
 color: "#8B5CF6"
-model: opus
 ---
 
 <role>

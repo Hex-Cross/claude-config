@@ -9,7 +9,6 @@ color: cyan
 #       hooks:
 #         - type: command
 #           command: "npx eslint --fix $FILE 2>/dev/null || true"
-model: sonnet
 ---
 
 <role>
@@ -461,6 +460,9 @@ Verified patterns from official sources:
 </output_format>
 
 <execution_flow>
+
+At research decision points, apply structured reasoning:
+@$HOME/.claude/get-shit-done/references/thinking-models-research.md
 
 ## Step 1: Receive Scope and Load Context
 

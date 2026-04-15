@@ -9,7 +9,6 @@ color: "#F472B6"
 #       hooks:
 #         - type: command
 #           command: "npx eslint --fix $FILE 2>/dev/null || true"
-model: opus
 ---
 
 <role>
